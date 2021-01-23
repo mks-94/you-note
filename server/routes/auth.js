@@ -44,10 +44,10 @@ router.post("/", async (req, res) => {
 });
 
 //Create Login
-router
-  .post("/login", (req, res) => {
-    const { username, password } = req.body;
-    User.findOne({ username }).then((user) => {
+router.post("/login", (req, res) => {
+  const { username, password } = req.body;
+  User.findOne({ username })
+    .then((user) => {
       if (!user) {
         res.status(500).json({ msg: "No user with that username" + username });
         return;
@@ -65,9 +65,11 @@ router
           res.send({ token, user: { username: user.username } });
         }
       );
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send(err);
     });
-  })
-  .catch((err) => {
-    console.log(err);
-    res.status(500).send(err);
-  });
+});
+
+module.exports = router;
