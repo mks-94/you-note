@@ -1,51 +1,49 @@
 import React, { useState } from "react";
-import { Grid, TextField } from "@material-ui/core";
-import Youtube from "react-youtube";
+import { BrowserRouter as Router } from "react-router-dom";
+import { AuthContext } from "./components/auth/auth";
+import AuthForm from "./components/auth/authForm";
 
 const App = () => {
-  const [videoLink, setVideoLink] = useState("");
-  const [videoTimestamp, setVideoTimestamp] = useState(0);
+  const existingToken = localStorage.getItem("token") || "";
+  const existingUsername = localStorage.getItem("username") || "";
+  const [authToken, setAuthToken] = useState(existingToken);
+  const [username, setUsername] = useState(existingUsername);
 
-  const onChange = (e) => {
-    setVideoLink(e.target.value);
-    console.log(e.target.value);
+  const setUserName = (data) => {
+    if (!data) {
+      localStorage.removeItem("username");
+      setUsername();
+    } else {
+      localStorage.setItem("username", data);
+      setUsername(data);
+    }
   };
 
-  const getVideoId = () => {
-    if (videoLink === "" || videoLink === undefined) return "";
-
-    //www.youtube.com/watch?v=ID&...
-    let splitVideoLink = videoLink.split("v=")[1];
-    let ampersandLocation = splitVideoLink.indexOf("&");
-    if (ampersandLocation !== -1) {
-      return splitVideoLink.substring(0, ampersandLocation);
+  const setToken = (data) => {
+    if (!data) {
+      localStorage.removeItem("token");
+      setAuthToken();
+    } else {
+      localStorage.setItem("token", JSON.stringify(authToken));
+      setAuthToken(data);
     }
-    return splitVideoLink;
   };
 
   return (
-    <Grid container direction="column" justify="center" alignItems="center">
-      <Grid item xs={12}>
-        <TextField
-          value={videoLink}
-          name="videoLink"
-          placeholder="Enter a youtube URL"
-          variant="outlined"
-          onChange={(e) => onChange(e)}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <Youtube
-          videoId={getVideoId()}
-          opts={{
-            width: "100%",
-            playerVars: {
-              start: parseInt(videoTimestamp),
-            },
-          }}
-        />
-      </Grid>
-    </Grid>
+    <AuthContext.Provider
+      value={{
+        authToken,
+        setAuthToken: setToken,
+        username,
+        setUserName: setUserName,
+      }}
+    >
+      <Router>
+        <div className="App">
+          <AuthForm />
+        </div>
+      </Router>
+    </AuthContext.Provider>
   );
 };
 
