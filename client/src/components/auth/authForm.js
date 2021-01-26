@@ -7,7 +7,7 @@ const AuthForm = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [action, setAction] = useState("Sign In");
-  const { setUserName, setAuthToken, user_name } = useAuth();
+  const { setUserName, setAuthToken } = useAuth();
 
   const authenticate = async () => {
     const basePath = "api/auth/"; //server side path
@@ -33,10 +33,6 @@ const AuthForm = (props) => {
       setUsername(json.user.username);
     } else {
       alert(json.msg);
-    }
-
-    if (user_name) {
-      //redirect to homepage
     }
   };
 

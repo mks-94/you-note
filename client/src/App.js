@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { AuthContext } from "./components/auth/auth";
 import AuthForm from "./components/auth/authForm";
 
@@ -38,11 +38,11 @@ const App = () => {
         setUserName: setUserName,
       }}
     >
-      <Router>
+      <BrowserRouter>
         <div className="App">
           <AuthForm />
         </div>
-      </Router>
+      </BrowserRouter>
     </AuthContext.Provider>
   );
 };

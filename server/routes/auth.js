@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
 
   let newUser = new User({
     username,
-    passwordHashed: bcrypt.hashSync(password, 10),
+    passwordHash: bcrypt.hashSync(password, 10),
     numNotes: 0,
   });
 
@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
     .then((user) => {
       jwt.sign(
         {
-          username: User.username,
+          username: newUser.username,
         },
         "secret",
         (err, token) => {
@@ -57,7 +57,7 @@ router.post("/login", (req, res) => {
 
       jwt.sign(
         {
-          username: User.username,
+          username: newUser.username,
         },
         "secret",
         (err, token) => {
